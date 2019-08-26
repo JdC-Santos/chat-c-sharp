@@ -60,6 +60,12 @@ namespace TryChat
                         {
                             chatLength = qtdAtual;
                             Console.Clear();
+                            Console.Write("Logado como: " + nome + " | Digite ");
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write("logout");
+                            Console.ResetColor();
+                            Console.WriteLine(" para fechar o chat.");
+                            Console.WriteLine("");
                             Console.WriteLine(chat);
                             
                         }
@@ -90,9 +96,14 @@ namespace TryChat
             {
                 StreamWriter sw = new StreamWriter(caminho, true);
 
-                Console.WriteLine("");
+                Console.Write("Mensagem: ");
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 mensagem = Console.ReadLine();
+
+                if (mensagem == "logout")
+                {
+                    Environment.Exit(1);
+                }
 
                 Console.ResetColor();
 
