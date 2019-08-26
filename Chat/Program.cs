@@ -13,10 +13,9 @@ namespace TryChat
         static string mensagem;
         static int NomeLength;
         static int chatLength = 0;
+        static string arquivo = "chat.txt";
         static void Main(string[] args)
         {
-            string arquivo = "";
-
             //é um saco ter que digitar isso toda vez, entao vo deixar o arquivo como fixo
             //pelo que eu testei nao da nenhum problema abrir o mesmo arquivo mais de 1x
             //entao basta clicar que ele vai gerar o txt e pronto.
@@ -25,7 +24,6 @@ namespace TryChat
             //Console.WriteLine(@"Exemplo: caminho\arquivo.bin");
 
             //arquivo = Console.ReadLine();
-            arquivo = "chat.txt";
 
             Console.Write("Digite o seu nick: ");
             nome = Console.ReadLine();
@@ -42,18 +40,18 @@ namespace TryChat
                 st.Close();
             }
 
-            AtualizarChat(arquivo);
+            AtualizarChat();
         }
 
-        static public void AtualizarChat(string caminho)
+        static public void AtualizarChat()
         {
             do
             {
-                if (File.Exists(caminho))
+                if (File.Exists(arquivo))
                 {
                     try
                     {
-                        StreamReader rd = new StreamReader(caminho);
+                        StreamReader rd = new StreamReader(arquivo);
                         string chat = rd.ReadToEnd();
                         int qtdAtual = chat.Length;
                         if (chatLength < qtdAtual)
@@ -77,10 +75,14 @@ namespace TryChat
 
                     }
                 }
+                if (mensagem != "")
+                {
+                    EnviarMensagem();
+                }
 
                 if (Console.KeyAvailable)
                 {
-                    Gravar(caminho);
+                    Gravar();
                 }
                 else
                 {
@@ -90,20 +92,27 @@ namespace TryChat
             } while (true);
         }
 
-        static public void Gravar(string caminho)
+        static public void EnviarMensagem()
+        {
+            Console.Write("Mensagem: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            mensagem = Console.ReadLine();
+
+            if (mensagem == "logout")
+            {
+                Environment.Exit(1);
+            }
+            else
+            {
+                Gravar();
+            }
+        }
+
+        static public void Gravar()
         {
             try
             {
-                StreamWriter sw = new StreamWriter(caminho, true);
-
-                Console.Write("Mensagem: ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                mensagem = Console.ReadLine();
-
-                if (mensagem == "logout")
-                {
-                    Environment.Exit(1);
-                }
+                StreamWriter sw = new StreamWriter(arquivo, true);
 
                 Console.ResetColor();
 
